@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Дальние дачи</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+    <a href="/new_client/" style="color: white; text-decoration: none; color: #b3b3b3;"><img style="width: 70%;" src="{% static 'css/images/baseline_person_add_white_24dp.png' %}"></a>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Меню
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/">Все отвеченные звонки</a></li>
+            <li><a class="dropdown-item" href="{% url 'clients' %}">Клиенты</a></li>
+            <li><a class="dropdown-item" href="{% url 'client_list' %}">Потенциальные клиенты</a></li>
+            <li><a class="dropdown-item" href="{% url 'account' %}">Личный кабинет</a></li>
+            <li><a class="dropdown-item" href="{% url 'calendar' %}">Мой график</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="calendar-wrapper" style="margin: 0 auto; padding-top: 40px; width: 300px; text-align: center;">
+	<h2 style="margin-bottom: 15px;" title="выбирете график">График работы сотрудников</h2>
+	{{ message }}
+	<div id="with-altField"></div>
+</div>
+	<style type="text/css">
+		.ui-datepicker-unselectable-custom, .ui-state-disabled-custom{
+			opacity: 0.34;
+			cursor: pointer;
+		}
+	</style>
+
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			// mounted
+			renderCalendar();
+		});
+
+		$('#with-altField').mousemove((e) => {
+			let elem = e.target;
+			if(elem.tagName == 'A' || elem.tagName =='TD' || elem.nodeName == "#text"){
+				let selectDate = false;
+				let day = 0;
+				if(elem.tagName == 'A'){
+					selectDate = elem.parentElement.className.indexOf(' ui-state-highlight') !== -1;
+					day = elem.text;
+					elem = elem.parentElement;
+				}else if(elem.tagName =='TD'){
+					selectDate = elem.className.indexOf(' ui-state-highlight') !== -1;
+					day = elem.firstChild.text;
+				}
+				else{
+					elem = elem.parentElement.parentElement;
+					selectDate = elem.className.indexOf(' ui-state-highlight') !== -1;
+					day = elem.firstChild.text;
+				}
+				if(selectDate){
+					let months = ['Январь','Февраль','Март','Апрель','Май','Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+					let month = months.indexOf($('.ui-datepicker-month').text())+1;
+					month = month < 10 ? "0" + month : month;
+					day = day < 10 ? "0" + day : day;
+					let date = $('.ui-datepicker-year').text()+'-'+month +'-'+day;
+					let text = window.users[window.selectDates.indexOf(date)];
+					let div = document.getElementById('describe-div');
+					if(div != undefined) div.parentElement.removeChild(div);
+					let outerDiv = document.createElement('div');
+					outerDiv.id = "describe-div";
+					outerDiv.style = 'position:absolute;color:black;';
+					let describe = document.createElement('div');
+					describe.innerText = text;
+					describe.style = "margin-top:10px;background:white;padding-left:5px; padding-right:5px; font-weight: 900;";
+					outerDiv.appendChild(describe);
+					elem.appendChild(outerDiv);
+				}
+			}
+			else{
+				let div = document.getElementById('describe-div');
+				if(div != undefined) div.parentElement.removeChild(div);
+			}
+		});
+		async function updateDate(date) {
+			
+			let data = {
+			  data: date,
+			};
+			
+			window.date = new Date(date);
+			//window.date = window.date.substring(2, window.date.length);
+		let response = await fetch('{% url "calendar" %}', {
+		  method: 'POST',
+		  traditional: true,
+		  headers: {
+		    'Content-Type': 'application/json;charset=utf-8'
+		  },
+		  body: JSON.stringify(data)
+		});
+
+		//console.log(response);
+
+		await renderCalendar();
+
+		}
+
+		async function renderCalendar() {
+
+		let response = await fetch('{% url "api:subject_list" %}');
+		response = await response.json();
+		window.users = response.map(item => item.user_name);
+		response = response.map(item => item.data)
+		// для теста
+		window.selectDates = response;
+		var date = new Date();
+		$('#with-altField').datepicker('setDate', null);
+			$('#with-altField').multiDatesPicker({
+				minDate: +0,
+				dateFormat: 'yy-mm-dd',
+				addDates: response, 
+				onSelect: updateDate,
+				firstDay: 1,
+			});
+			$("#with-altField").datepicker("setDate", window.date);
+		let dateS = $('#with-altField').multiDatesPicker('getDates');
+		  $('.ui-datepicker-unselectable').removeClass('ui-datepicker-unselectable').addClass('ui-datepicker-unselectable-custom');
+		    $('.ui-state-disabled').removeClass('ui-state-disabled').addClass('ui-state-disabled-custom');
+		    $('.ui-state-highlight').click((e) => {
+			 	let months = ['Январь','Февраль','Март','pril','Май','Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+				let day = $(e.target).text();
+				let date = $('.ui-datepicker-year').text()+'-'+(months.indexOf($('.ui-datepicker-month').text())+1) +'-'+day;
+				
+			});
+			$('#mdp-demo span').hover((e) => {
+				let months = ['Январь','Февраль','Март','Апрель','Май','Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+				let day = $(e.target).text();
+				let date = months.indexOf($('.ui-datepicker-year').text()+'-'+$('.ui-datepicker-month').text())+1 +'-'+day;
+				let index = window.selectDates.find(item => {return item.user == user});
+			$(e.target).attr('title', index.user);
+			})
+		}
+
+	</script>
+{% endblock %}

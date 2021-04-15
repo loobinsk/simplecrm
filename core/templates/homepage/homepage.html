@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Дальние дачи</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+    <a href="/new_client/" style="color: white; text-decoration: none; color: #b3b3b3;"><img style="width: 70%;" src="{% static 'css/images/baseline_person_add_white_24dp.png' %}"></a>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Меню
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/">Все отвеченные звонки</a></li>
+            <li><a class="dropdown-item" href="{% url 'clients' %}">Клиенты</a></li>
+            <li><a class="dropdown-item" href="{% url 'client_list' %}">Потенциальные клиенты</a></li>
+            <li><a class="dropdown-item" href="{% url 'account' %}">Личный кабинет</a></li>
+            <li><a class="dropdown-item" href="{% url 'calendar' %}">Мой график</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% if request.user.is_superuser %}
+	<div style="margin-top: 20px;">
+		<h3 style="margin-left: 20px;">Вы имеете права <a href="/admin/">суперпользователя</a></h3>
+		{% for i in posts %}
+		<hr>
+			<div style="margin-left: 20px;">
+					{% if i.client.full_name %}
+						<p><a href="{{ i.client.get_absolute_url }}">{{ i.client.full_name }}</a>, звонок с номера +7{{ i.client.phone }}</p>
+					{% else %}
+						<p>звонок с номера <a href="{{ i.client.get_absolute_url }}">+7{{ i.client.phone }}</a></p>
+					{% endif %}
+				  {% if i.url %}
+					  <audio controls style="outline: none; margin-top: 10px;">
+					    <source src="{{ i.url.url }}">
+					  </audio><br>
+				  {% else %}
+				      <p>аудио отсутствует.</p>
+				  {% endif %}
+				  <span style="color: #404040">{{ i.call_date }}</span>
+				</p>
+			</div>
+		{% endfor %}
+		{% include "pagination.html" with page=posts %}
+	</div>
+{% else %}
+	<div style="margin-top: 20px;">
+		<h3 style="margin-left: 20px;">Состоявшиеся диалоги:</h3>
+		{% for i in managers_calls %}
+			<hr>
+			<div style="margin-left: 20px;">
+					{% if i.client.full_name %}
+						<p><a href="{{ i.client.get_absolute_url }}">{{ i.client.full_name }}</a>, звонок с номера +7{{ i.client.phone }}</p>
+					{% else %}
+						<p>звонок с номера <a href="{{ i.client.get_absolute_url }}">+7{{ i.client.phone }}</a></p>
+					{% endif %}
+				  <audio controls style="outline: none; margin-top: 10px;" class="align-top">
+				    <source src="{{ i.url.url }}"> 
+				  </audio><br>
+				  <span style="color: #404040; margin-top: 10px; margin-left: 10px;">{{ i.call_date }}</span>
+				</p>
+			</div>
+		{% endfor %}
+		{% include "pagination.html" with page=managers_calls %}
+	</div>
+
+{% endif %}
+{% endblock %}

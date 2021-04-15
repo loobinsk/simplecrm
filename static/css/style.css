@@ -1,0 +1,91 @@
+body {
+	background-color: white;
+}
+
+
+.my-form {
+	margin: 0;
+	width: 250px;
+	box-shadow: 0 0 3px rgba(0,0,0,0.5);
+	color: black;
+	margin-bottom: 0;
+	outline: none;
+	border: none;
+}
+
+.no-link {
+	cursor: pointer;
+}
+
+.no-link:hover {
+	text-decoration: underline;
+}
+
+.margin-top {
+	margin-top: 20px;
+}
+
+.client-parametrs {
+	margin-bottom: 40px;
+	display: inline-block;
+	width: 330px;
+	padding-left: 10px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin-right: 3.2%;
+	background-color: white;
+}
+
+.client-calls {
+	vertical-align: top;
+	display: inline-block;
+}
+
+.username {
+	padding-top: 10px;
+	padding-left: 20px;
+	color: #363636;
+	width: 100%;
+	height: 60px;
+	background-color: #f7ffe8;
+}
+
+@media screen and (min-width: 900px){
+    .client-parametrs {
+        width: 500px;
+        padding-left: 30px;
+    }
+
+    .comment_form{
+    	margin-top: 10px;
+    }
+
+	.client-calls {
+		width: 500px;
+	}
+	.audio {
+		height: 20px;
+	}
+}
+@media screen and (max-width: 900px){
+    .client-parametrs {
+        width: 370px;
+        padding-left: 10px;
+    }
+    .call_date {
+    	text-align: center;
+    }
+
+    .comments {
+    	width: 90%;
+    }
+
+    .comment_form{
+    	margin-top: 10px;
+    	width: 90%;
+    }
+
+    .audio {
+    	text-align: center;
+    }
+}

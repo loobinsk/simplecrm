@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Дальние дачи</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+    <a href="/new_client/" style="color: white; text-decoration: none; color: #b3b3b3;"><img style="width: 70%;" src="{% static 'css/images/baseline_person_add_white_24dp.png' %}"></a>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Меню
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/">Все отвеченные звонки</a></li>
+            <li><a class="dropdown-item" href="{% url 'clients' %}">Клиенты</a></li>
+            <li><a class="dropdown-item" href="{% url 'client_list' %}">Потенциальные клиенты</a></li>
+            <li><a class="dropdown-item" href="{% url 'account' %}">Личный кабинет</a></li>
+            <li><a class="dropdown-item" href="{% url 'calendar' %}">Мой график</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<h2 style="margin-top: 20px; text-align: center;">Создание нового клиента</h2><br>
+<form method="post" action=".">
+  {% csrf_token %}
+  <div style="text-align: center;">
+  <span style="font-weight: 900;">ФИО:</span><br>
+    <div style="margin-left: 15%; width: 70%;" class="input-group mb-3">
+      <input style="" type="text" class="form-control" name="full_name" aria-label="Recipient's username" aria-describedby="button-addon2">
+    </div>
+  </div>
+  <div style="text-align: center;">
+  <span style="font-weight: 900;">Номер телефона:</span><br>
+    <div style="margin-left: 15%; width: 70%;" class="input-group mb-3">
+      <input style="" type="text" class="form-control" name="phone_number" id="phone" aria-label="Recipient's username" placeholder="+7(___) ___-____" aria-describedby="button-addon2">
+    </div>
+  </div>
+  <div style="text-align: center;">
+  <span style="font-weight: 900;">Почта:</span><br>
+    <div style="margin-left: 15%; width: 70%;" class="input-group mb-3">
+      <input style="" type="text" class="form-control" name="email" aria-label="Recipient's username" aria-describedby="button-addon2">
+    </div>
+  </div>
+  <div style="text-align: center;">
+  <span style="font-weight: 900;">Источник звонка:</span><br>
+    <div style="margin-left: 15%; width: 70%;">
+      <select name="source_call" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+        <option value="интернет">Не определено</option>
+        <option value="интернет">интернет</option>
+        <option value="наружная реклама">наружная реклама</option>
+        <option value="рекомендация">рекомендация</option>
+        <option value="циан">циан</option>
+        <option value="яндекс недвижимость">яндекс недвижимость</option>
+      </select>
+    </div>
+  </div>
+      <div style="text-align: center;"><br>
+        <span style="font-weight: 900;">Текущая ситуация:</span><br>
+        <div style="margin-left: 15%; width: 70%;">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="current_situation" aria-label="Recipient's username" aria-describedby="button-addon2">
+        </div>
+      </div>
+      <span style="font-weight: 900;">Желаемая ситуация:</span><br>
+      <div style="margin-left: 15%; width: 70%;">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="desired_situation" value="{{ client.desired_situation }}" aria-label="Recipient's username" aria-describedby="button-addon2">
+        </div>
+      </div>
+      <span style="font-weight: 900;">Альтернативные варианты:</span><br>
+      <div style="margin-left: 15%; width: 70%;">
+        <div  class="input-group mb-3">
+          <input autocomplete="off" type="text" class="form-control" name="other_option" value="{{ client.other_options }}" aria-label="Recipient's username" aria-describedby="button-addon2">
+        </div>
+      </div>
+      <span style="font-weight: 900;">Основной мотив:</span><br>
+      <div style="margin-left: 15%; width: 70%;">
+        <div  class="input-group mb-3">
+          <input autocomplete="off" type="text" class="form-control" name="main_motive" value="{{ client.main_motive }}" aria-label="Recipient's username" aria-describedby="button-addon2">
+        </div>
+      </div>
+      <span style="font-weight: 900;">Предложил:</span><br>
+      <div style="margin-left: 15%; width: 70%;">
+        <div class="input-group mb-3">
+          <input autocomplete="off" type="text" class="form-control" name="proposed" value="{{ client.proposed }}" aria-label="Recipient's username" aria-describedby="button-addon2">
+        </div>
+      </div>
+      <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Создать клиента</button>
+      <div style="height: 20vh;"></div>
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{% static 'js/jquery.maskedinput.min.js' %}" ></script>
+<script>
+$(function(){
+  $("#phone").mask("+7(999) 999-9999");
+});
+</script>
+{% endblock %}

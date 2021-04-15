@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Дальние дачи</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+    <a href="/new_client/" style="color: white; text-decoration: none; color: #b3b3b3;"><img style="width: 70%;" src="{% static 'css/images/baseline_person_add_white_24dp.png' %}"></a>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Меню
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/">Все отвеченные звонки</a></li>
+            <li><a class="dropdown-item" href="{% url 'clients' %}">Клиенты</a></li>
+            <li><a class="dropdown-item" href="{% url 'client_list' %}">Потенциальные клиенты</a></li>
+            <li><a class="dropdown-item" href="{% url 'account' %}">Личный кабинет</a></li>
+            <li><a class="dropdown-item" href="{% url 'calendar' %}">Мой график</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+	<h2 class="username">
+    {% if request.user.first_name %}
+      {{ request.user.first_name }}
+    {% else %}
+      {{ request.user.username }}
+    {% endif %}
+    <a style="color: red;" href="{% url 'logout' %}">выйти</a>
+  </h2>
+  <form action="{% url 'update_user' %}" method="post">
+    {% csrf_token %}
+    <div style="margin-left: 20px; margin-top: 20px; margin-bottom: 40px;">
+        <span style="font-weight: 900;">ваше имя:</span><br> 
+        <div style="margin-top: 10px; width: 360px;" class="input-group mb-3">
+          <input type="text" class="form-control" name="username" value="{{ request.user.first_name }}" aria-label="Recipient's username" aria-describedby="button-addon2">
+        </div>
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">сохранить</button>
+        <a href="{% url 'change_pass' %}" style="margin-left: 20px;">сменить пароль</a>
+    </div>
+
+  </form>
+	<p style="margin-left: 20px;">Все ваши звонки за сегодняшний день:</p>
+	{% for i in last_call %}
+  <hr>
+    <div style="margin-left: 20px;">
+      <p><a href="{{ i.client.get_absolute_url }}"><span class="align-top" style="margin-left: 10px;">{{ i.get_name }}</span></a><br>
+        <audio controls style="outline: none; margin-top: 10px;" class="align-top">
+          <source src="{{ i.url.url }}"> 
+        </audio><br>
+        <span style="color: #404040; margin-top: 10px; margin-left: 10px;">{{ i.call_date }}</span>
+      </p>
+    </div>
+	{% endfor %}
+	<hr>
+	<p style="margin-left: 20px;">Всего звонков: {{ last_call_count }}</p>
+{% endblock %}

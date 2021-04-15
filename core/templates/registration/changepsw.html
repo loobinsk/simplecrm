@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Дальние дачи</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+    <a href="/new_client/" style="color: white; text-decoration: none; color: #b3b3b3;"><img style="width: 70%;" src="{% static 'css/images/baseline_person_add_white_24dp.png' %}"></a>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Меню
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/">Все отвеченные звонки</a></li>
+            <li><a class="dropdown-item" href="{% url 'clients' %}">Клиенты</a></li>
+            <li><a class="dropdown-item" href="{% url 'client_list' %}">Потенциальные клиенты</a></li>
+            <li><a class="dropdown-item" href="{% url 'account' %}">Личный кабинет</a></li>
+            <li><a class="dropdown-item" href="{% url 'calendar' %}">Мой график</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+  <div style="margin-top: 20px; margin-left: 20px;">
+    <form action="{% url 'change_pass' %}" method="post">
+        {% csrf_token %}
+        {{ form.errors }}
+        <p>Текущий пароль:</p>
+        {{ form.old_password }}<br>
+        <p style="margin-top: 20px;">Новый пароль:</p>
+        {{ form.new_password1 }}<br>
+        <p style="margin-top: 20px;">Повторите пароль:</p>
+        {{ form.new_password2 }}<br>
+        <button class="btn btn-outline-secondary" style="margin-top: 20px;" type="submit" id="button-addon2">сохранить</button>
+    </form>
+  </div>
+{% endblock %}

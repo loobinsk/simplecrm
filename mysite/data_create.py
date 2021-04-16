@@ -13,7 +13,6 @@ def parse(request):
 			if str(i['исходящий номер']) not in black_list and str(i['входящий номер']) not in black_list:
 				if str(i['статус звонка']) == 'ANSWERED':
 					
-
 					if not User.objects.filter(username=i['входящий номер']).exists():
 							new_user = User.objects.create_user(username=i['входящий номер'], password='pass123')
 							new_user.save()

@@ -9,7 +9,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-    <a href="/new_client/" style="color: white; text-decoration: none; color: #b3b3b3;"><img style="width: 70%;" src="{% static 'css/images/baseline_person_add_white_24dp.png' %}"></a>
+    <a href="/new_client/" style="color: white; font-size: 24px; text-decoration: none; margin-right: 5px; margin-left: 5px;">+</a>
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,7 +39,7 @@
   <div style="text-align: center;">
   <span style="font-weight: 900;">Номер телефона:</span><br>
     <div style="margin-left: 15%; width: 70%;" class="input-group mb-3">
-      <input style="" type="text" class="form-control" name="phone_number" id="phone" aria-label="Recipient's username" placeholder="+7(___) ___-____" aria-describedby="button-addon2">
+      <input style="" type="text" class="form-control" name="phone_number" id="phone" aria-label="Recipient's username" placeholder="+7(9__) ___-____" aria-describedby="button-addon2">
     </div>
   </div>
   <div style="text-align: center;">
@@ -99,7 +99,7 @@
 <script src="{% static 'js/jquery.maskedinput.min.js' %}" ></script>
 <script>
 $(function(){
-  $("#phone").mask("+7(999) 999-9999");
+  $("#phone").mask("+7(955) 555-5555");
 });
 </script>
 {% endblock %}

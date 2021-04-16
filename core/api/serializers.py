@@ -4,4 +4,4 @@ from ..models import SelectedData
 class SubjectSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = SelectedData
-		fields = ['user_name', 'data']
+		fields = ['user', 'data']

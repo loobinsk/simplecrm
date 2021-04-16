@@ -89,7 +89,7 @@ class CallComment(models.Model):
 		return f'{self.author.username}, {self.call.client.get_name()}, {self.text}'
 
 class SelectedData(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	user = models.CharField(max_length=255)
 	data1 = models.DateField()
 
 	def user_name(self):

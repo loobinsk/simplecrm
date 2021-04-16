@@ -176,18 +176,13 @@ def calendar(request):
 	if request.method=='POST':
 		received_json_data=json.loads(request.body)
 		for i in received_json_data.values():
-			new_data = SelectedData(user=request.user, data1=i)
-			if not SelectedData.objects.filter(data1=i).exists():
+			new_data = SelectedData(user=request.user.first_name, data1=i)
+			if not SelectedData.objects.filter(data1=i, user=request.user.first_name).exists():
 				new_data.save()
 			else:
-				get_data = SelectedData.objects.get(data1=i)
-				if get_data.user_name() == request.user.first_name:
-					print(get_data.user_name())
-					print(request.user.first_name)
+				get_data = SelectedData.objects.get(data1=i, user=request.user.first_name)
+				if get_data.user == request.user.first_name:
 					get_data.delete()
-				else:
-					print(get_data.user_name())
-					print(request.user.first_name)
 
 	template = 'registration/calendar.html'
 	context = {'message': message}
